@@ -18,7 +18,7 @@ void led_proc(void)
    for (;;)
    {
       toggle_led();
-      wait(1);
+      wait(5);
    }
 }
 

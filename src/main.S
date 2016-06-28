@@ -12,6 +12,10 @@ main:
    ldi   YH,hi8(led_proc)
    rcall start_proc
 
+   ldi   YL,lo8(sendp)
+   ldi   YH,hi8(sendp)
+   rcall start_proc
+
 .Lmainloop:
    ldi   r26,lo8(buf)
    ldi   r27,hi8(buf)
@@ -29,6 +33,15 @@ main:
    rcall send_byte
 
    rjmp  .Lmainloop
+
+
+sendp:
+   ldi   r16,'.'
+   rcall send_byte
+   ldi   r24,27
+   ldi   r25,0
+   rcall wait
+   rjmp  sendp
 
 
 .section .data
