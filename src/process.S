@@ -141,6 +141,12 @@ stack_address:
    ret
   
 
+.global sys_sleep
+sys_sleep:
+   sleep
+   ret
+
+
 .section .data
 ; currently active process
 current_proc:

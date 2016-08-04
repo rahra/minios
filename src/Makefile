@@ -1,6 +1,6 @@
 # Makefile to build and upload assembler sources for Arduino.
 #
-# @author Bernhard R. Fischer, 2048R/5C5FFD47 <bf@abenteuerland.at>
+# @author Bernhard R. Fischer, 4096R/8E24F29D <bf@abenteuerland.at>
 #
 # @license This is free software, do what ever you like with it.
 #
