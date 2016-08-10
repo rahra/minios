@@ -24,7 +24,7 @@ void wait(unsigned int t)
 }
 
 
-/* This function continuously toggles the led. This function does never return.
+/* This function continuously toggles the led. The function does never return.
  */
 void led_proc(void)
 {

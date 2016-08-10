@@ -1,16 +1,26 @@
+/*! \file process.S
+ * This file contains the routines for the process management.
+ *
+ * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
+ */
+
 #include <avr/io.h>
 
+; maximum number of processes
 #define MAX_PROCS 5
+; number of bytes used per process in the process list
 #define PROC_LIST_ENTRY 2
+; process stack size
 #define STACK_SIZE 64
 
 .section .text
 
+; Initialize default values at kernel startup.
 .global init_procs
 init_procs:
-   clr   r16
+   clr   r16               ; Set the current PID to 0.
    sts   current_proc,r16
-   ldi   r16,1
+   ldi   r16,1             ; Set the number of processes to 1.
    sts   num_proc,r16
    ret
 

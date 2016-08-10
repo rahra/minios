@@ -8,7 +8,9 @@
 
 .section .text
 
-; main function
+; Main function. It is finally called in the init routing of the kernel (in
+; init.S). It starts additional processes and then in a loop reads from
+; the serial port and outputs the string "\nOK\r\n" to the serial port.
 .global main
 main:
    ldi   YL,lo8(led_proc)  ; Start led process (defined in ledproc.c) which
@@ -20,11 +22,11 @@ main:
 ;   rcall start_proc
 
 .Lmainloop:
-   ldi   r26,lo8(buf)      ; Read line from terminal.
+   ldi   r26,lo8(buf)      ; Read line from terminal into the buffer buf.
    ldi   r27,hi8(buf)
    rcall read
    
-   ldi   r16,'\n'          ; output the string "\nOK\r\n"
+   ldi   r16,'\n'          ; Output the string "\nOK\r\n".
    rcall send_byte
    ldi   r16,'O'
    rcall send_byte
@@ -35,7 +37,7 @@ main:
    ldi   r16,'\n'
    rcall send_byte
 
-   rjmp  .Lmainloop        ; repeat endlessly
+   rjmp  .Lmainloop        ; Repeat endlessly.
 
 
 ; Function to send a '.'.
@@ -49,6 +51,9 @@ sendp:
 
 
 .section .data
+
+; Data buffer used for serial input.
 buf:
 .space 256
+
 
