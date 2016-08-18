@@ -38,10 +38,13 @@ context_switch:
    st    Z+,YL
    st    Z,YH
 
+   ; determine next process to schedule
    rcall get_next_proc
    sts   current_proc,r16
 
+   ; calculate process list address of new process
    rcall proc_list_address
+   ; ...and store its stack address to Y
    ld    YL,Z+
    ld    YH,Z
 
@@ -54,24 +57,31 @@ context_switch:
 proc_list_address:
    push  r17
 
+   ; calculate process list offset:
+   ; multiply process number with size per entry
    ldi   r17,PROC_LIST_ENTRY
    mul   r17,r16
 
+   ; get start address of process list
    ldi   ZL,lo8(proc_list)
    ldi   ZH,hi8(proc_list)
+   ; and add offset
    add   ZL,r0
    adc   ZH,r1
    
    pop   r17
    ret
 
+
 ; get number of next process
-; This actually is the scheduler ;)
+; This actually is the (most simple round robin) scheduler ;)
 ; @param r16 current process
 ; @return r16 number of next process
 get_next_proc:
+   ; increase current PID
    inc   r16
    push  r17
+   ; and start at the first process if the last one is reached
    lds   r17,num_proc
    cp    r16,r17
    brne  .Lgnpexit
@@ -79,6 +89,7 @@ get_next_proc:
 .Lgnpexit:
    pop   r17
    ret
+
 
 ; Start a new process
 ; @param Y Start address of new process
@@ -94,33 +105,39 @@ start_proc:
 
    movw  r26,r28
 
+   ; disable all interrupts
    cli
 
+   ; get new PID and calculate stack (top) address
    lds   r16,num_proc
    rcall stack_address
 
-   lsr   XH    ; Speicheradresse (Byteadresse) durch 2
-   ror   XL    ; dividieren.
+   lsr   XH    ; divide process entry address by 2
+   ror   XL    ; (because AVR prog addresses are word not byte addresses)
 
-   st    Y,XL  ; Auf neuen Stack speichern
+   st    Y,XL  ; save entry point to the stack of the new process
    st    -Y,XH
 
-   sbiw  YL,32 ; 32 von Y subtrahieren
+   sbiw  YL,32 ; subtract 32 from Y (stack) which is the register space
+               ; of the context switcher
 
-   clr   r16
+   clr   r16   ; store 0 to Y (stack) which is the SREG
    st    -Y,r16
 
    sbiw  YL,1
-   
+
+   ; store final stack address to the process list
    lds   r16,num_proc
    rcall proc_list_address
 
    st    Z+,YL   ; store new stack pointer to proc_list
    st    Z,YH
 
+   ; increase total number of processes
    inc   r16
    sts   num_proc,r16
 
+   ; enable interrupts again
    sei
 
    pop   ZH
