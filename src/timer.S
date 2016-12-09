@@ -5,6 +5,8 @@
  * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
  */
 
+.file "timer.S"
+
 .include "macro.i"
 
 #include <avr/io.h>

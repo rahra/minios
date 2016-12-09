@@ -4,6 +4,8 @@
  * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
  */
 
+.file "process.S"
+
 #include <avr/io.h>
 
 ; maximum number of processes
