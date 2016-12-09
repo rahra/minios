@@ -4,7 +4,11 @@
  * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
  */
 
+.file "main.S"
+
 #include <avr/io.h>
+
+#define SEND_PROMPT
 
 .section .text
 
@@ -22,20 +26,22 @@ main:
 ;   rcall start_proc
 
 .Lmainloop:
+#ifdef SEND_PROMPT
+   ldi   YL,lo8(.Lstr_arduino)
+   ldi   YH,hi8(.Lstr_arduino)
+   ldi   r16,.Lstr_arduino_len
+   rcall sys_pwrite
+#endif
+
+   rcall sys_read_flush
    ldi   r26,lo8(buf)      ; Read line from terminal into the buffer buf.
    ldi   r27,hi8(buf)
-   rcall read
+   rcall sys_read
    
-   ldi   r16,'\n'          ; Output the string "\nOK\r\n".
-   rcall send_byte
-   ldi   r16,'O'
-   rcall send_byte
-   ldi   r16,'K'
-   rcall send_byte
-   ldi   r16,'\r'
-   rcall send_byte
-   ldi   r16,'\n'
-   rcall send_byte
+   ldi   YL,lo8(.Lstr_ok)  ; send "ok" string
+   ldi   YH,hi8(.Lstr_ok)
+   ldi   r16,.Lstr_ok_len
+   rcall sys_pwrite
 
    rjmp  .Lmainloop        ; Repeat endlessly.
 
@@ -43,11 +49,20 @@ main:
 ; Function to send a '.'.
 sendp:
    ldi   r16,'.'           ; send '.'
-   rcall send_byte
+   rcall sys_send
    ldi   r24,27            ; wait(27)
    ldi   r25,0
    rcall wait
    rjmp  sendp             ; endless loop
+
+.Lstr_ok:
+.ascii "\rOK\r\n"
+.set .Lstr_ok_len, . - .Lstr_ok
+.Lstr_arduino:
+.ascii "Arduino> "
+.set .Lstr_arduino_len, . - .Lstr_arduino
+
+.balign 2
 
 
 .section .data

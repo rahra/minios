@@ -3,13 +3,15 @@
  * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
  */
 
+.file "led.S"
+
 #include <avr/io.h>
 
 
 .section .text
 
 
-; Function initializes the led port.
+; Function initializes the led port on the Arduino board.
 .global init_ledport
 init_ledport:
    ldi   r16,0x20                ; set bit 5 of port b to output

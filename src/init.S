@@ -3,6 +3,8 @@
  * @author Bernhard R. Fischer, 4096R/8E24F29D bf@abenteuerland.at
  */
 
+.file "init.S"
+
 #include <avr/io.h>
 
 
@@ -18,7 +20,10 @@
 
 ; serial input buffer vector
 .org 0x48
-   rjmp  rx_handler
+   rjmp  serial_rx_handler
+
+.org 0x4c
+   rjmp  serial_tx_handler
 
 
 ; "ConstrucTORS"
