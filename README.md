@@ -12,25 +12,25 @@ will be enhanced and further developed.
 ## Description
 
 The core components of MiniOS is a dispatcher (```context_switch()```) and a
-thumb scheduler (```get_next_proc()```). Both are implemented in the file ```process.S```. The time slices for context switching are defined by the T0
+dumb scheduler (```get_next_proc()```). Both are implemented in the file ```process.S```. The time slices for context switching are defined by the T0
 timer interrupt, every ~16ms on a 16 MHz Arduino board. The code is found in ```timer.S```. This file additionally contains an uptime counter which is used
 in the function ```wait()``` in ```ledproc.c``` which sleeps a specific number
 of time slices. ```Process.S``` also contains the function to start new
 processes (```start_proc()```). After system initialization a single task
 (```main()```) is started by the OS (see below). All other processes have to be
-started subsequently by ```main()``` or sub-processes by calling ```start_proc()```.
+started subsequently by ```main()``` or its sub-processes by calling ```start_proc()```.
 
 The file ```serial_io.S``` contains the code for complete interrupt driven
 sending and receiving of data on the serial line. In this case it is used for a
-tiny command line interface (which actually does not no any commands at the
+tiny command line interface (which actually does not know any commands at the
 current stage of development ;) ).
 
 The system is initialized in ```init.S```. This is initializing the interrupts,
-the timer and all registers and starts the first initial task which is ```main()``` in ```main.S```. ```Main()``` can then start further childs.
+the timer and all registers and starts the first initial task which is ```main()``` located in the file ```main.S```. ```Main()``` can then start further child processes.
 
 Currently two processes are running: ```main()``` which implements the command
-line and serial communication and ```led_proc()``` which lets toggle the LED on
-the Arduino board. The latter is implemented in C to show the interfernce
+line and serial communication and ```led_proc()``` which toggles the LED on
+the Arduino board. The latter is implemented in C to show the interference
 between C and Assembler on AVR by following the [calling conventions](http://www.atmel.com/webdoc/AVRLibcReferenceManual/FAQ_1faq_reg_usage.html) accordingly.
 
 
