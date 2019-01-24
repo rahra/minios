@@ -38,8 +38,6 @@
 
    rcall init_procs              ; call OS initialization routines
    rcall init_timer
-   rcall init_ledport
-   rcall init_serial
 
    ldi   r16,lo8(main)           ; start first process (main)
    ldi   r17,hi8(main)

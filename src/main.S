@@ -17,6 +17,8 @@
 ; the serial port and outputs the string "\nOK\r\n" to the serial port.
 .global main
 main:
+   rcall init_serial       ; initialize serial port (UART)
+
    ldi   YL,lo8(led_proc)  ; Start led process (defined in ledproc.c) which
    ldi   YH,hi8(led_proc)  ; toggles the led.
    rcall start_proc

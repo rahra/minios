@@ -7,6 +7,7 @@
  */
 
 int toggle_led(void);            // defined in led.S
+void init_ledport(void);         // defined in led.S
 unsigned long get_uptime(void);  // defined in timer.S
 void sys_sleep(void);            // defined in process.S
 
@@ -28,6 +29,7 @@ void wait(unsigned int t)
  */
 void led_proc(void)
 {
+   init_ledport();
    for (;;)
    {
       toggle_led();
