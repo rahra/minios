@@ -8,8 +8,8 @@ This operating system currently serves demonstrational purpose and is not
 thought to be a mature OS for productional use. Although it can and probably
 will be enhanced and further developed.
 
-You may also have a look at [AVRShell](https://github.com/rahra/avrshell) which
-is a far more mature version of this.
+**You may also have a look at [AVRShell](https://github.com/rahra/avrshell) which
+is a far more mature version of this.**
 
 ## Description
 
